@@ -1,4 +1,6 @@
 import Head from 'next/head'
+import Fountain from '../components/Fountain'
+
 import styles from '../styles/Home.module.css'
 
 export default function Home() {
@@ -6,7 +8,7 @@ export default function Home() {
     <div className={styles.container}>
       <Head>
         <title>IBALIE</title>
-        <link rel='icon' href='/favicon.ico' />
+        <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <main className={styles.main}>
@@ -15,17 +17,14 @@ export default function Home() {
         <p className={styles.description}>
           <code className={styles.code}>Muggles Code</code>
         </p>
-
-        <div className={styles.fountain}>
-          <canvas />
-        </div>
+        <Fountain />
       </main>
 
-      {/* <footer className={styles.footer}>
+      <footer className={styles.footer}>
         <a href='https://github.com/MrHanson' target='_blank' rel='noopener noreferrer'>
           Powered by MrHanson
         </a>
-      </footer> */}
+      </footer>
     </div>
   )
 }
