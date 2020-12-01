@@ -10,10 +10,11 @@ export default function WaveCanvas() {
       numberOfWaves: 1,
       waveGap: 10
     })
-    requestAnimationFrame(() => {
-      waves.update()
-      waves.draw()
-    })
+    waves.draw()
+    // requestAnimationFrame(() => {
+    //   // waves.update()
+    //   waves.draw()
+    // })
   }, [])
 
   return (

@@ -12,39 +12,48 @@ function getWaveColor(): string {
   return Object.values(SEA_COLOR_SET)[ranIdx]
 }
 
-function Wave($canvas, $y, $color) {
-  this.ctx = $canvas.getContext('2d')
-  this.force = 0
-  this.wavePower = 40
-  this.count = $y
-  this.y = $y + Waves.globalY
-  this.alpha = 0.1
+class Wave {
+  ctx
+  color: string
+  force: number
+  wavePower: number
+  count: number
+  y: number
+  alpha: number
 
-  this.update = function () {
+  constructor($canvas, $y, $color) {
+    this.ctx = $canvas.getContext('2d')
+    this.color = $color
+    this.force = 1
+    this.wavePower = 40
+    this.count = $y
     this.y = $y + Waves.globalY
-    this.force = Math.sin(this.count)
-    this.count += 0.05
+    this.alpha = 0.1
   }
 
-  this.draw = function () {
-    this.ctx.fillStyle = $color + '1A'
+  draw() {
+    this.ctx.fillStyle = this.color + '1A'
     this.ctx.beginPath()
-    this.ctx.moveTo(0, this.y)
-    this.ctx.quadraticCurveTo(
-      Waves.width / 4,
-      this.y + this.wavePower * this.force,
-      Waves.width / 2,
-      this.y
-    )
-    this.ctx.quadraticCurveTo(
-      Waves.width * 0.75,
-      this.y - this.wavePower * this.force,
-      Waves.width,
-      this.y
-    )
-    this.ctx.lineTo(Waves.width, Waves.height)
-    this.ctx.lineTo(0, Waves.height)
-    this.ctx.lineTo(0, this.y)
+    // this.ctx.moveTo(0, this.y)
+    this.ctx.moveTo(100, 100)
+    this.ctx.lineTo(400, 100)
+    this.ctx.lineTo(400, 300)
+    this.ctx.lineTo(100, 300)
+    // this.ctx.quadraticCurveTo(
+    //   Waves.width / 4,
+    //   this.y + this.wavePower * this.force,
+    //   Waves.width / 2,
+    //   this.y
+    // )
+    // this.ctx.quadraticCurveTo(
+    //   Waves.width * 0.75,
+    //   this.y - this.wavePower * this.force,
+    //   Waves.width,
+    //   this.y
+    // )
+    // this.ctx.lineTo(Waves.width, Waves.height)
+    // this.ctx.lineTo(0, Waves.height)
+    // this.ctx.lineTo(0, this.y)
     this.ctx.closePath()
     this.ctx.fill()
   }
@@ -53,11 +62,11 @@ function Wave($canvas, $y, $color) {
 export default class Waves {
   ctx
   numberOfWaves: number
-  waveGap
-  move
-  color
+  waveGap: number
+  move: number
+  color: string
   wavesArr
-  beginingY
+  beginingY: number
 
   static width
   static height
@@ -74,16 +83,13 @@ export default class Waves {
     this.move = 1
     this.ctx = $canvas.getContext('2d')
 
-    this.color = getWaveColor()
-
     this.wavesArr = new Array()
 
-    this.beginingY = 0
+    this.beginingY = $height / 2
     while (this.numberOfWaves--) {
       this.wavesArr.push(new Wave($canvas, this.beginingY, getWaveColor()))
       this.beginingY += this.waveGap
     }
-    console.log(this.wavesArr)
   }
 
   update() {
@@ -100,11 +106,11 @@ export default class Waves {
   }
 
   draw() {
-    this.ctx.save()
+    // this.ctx.save()
     var len = this.wavesArr.length
     while (len--) {
       this.wavesArr[len].draw()
     }
-    this.ctx.restore()
+    // this.ctx.restore()
   }
 }
