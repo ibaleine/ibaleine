@@ -27,33 +27,28 @@ class Wave {
     this.force = 1
     this.wavePower = 40
     this.count = $y
-    this.y = $y + Waves.globalY
+    this.y = $y
     this.alpha = 0.1
   }
 
   draw() {
-    this.ctx.fillStyle = this.color + '1A'
+    this.ctx.fillStyle = this.color + '3A'
     this.ctx.beginPath()
-    // this.ctx.moveTo(0, this.y)
-    this.ctx.moveTo(100, 100)
-    this.ctx.lineTo(400, 100)
-    this.ctx.lineTo(400, 300)
-    this.ctx.lineTo(100, 300)
-    // this.ctx.quadraticCurveTo(
-    //   Waves.width / 4,
-    //   this.y + this.wavePower * this.force,
-    //   Waves.width / 2,
-    //   this.y
-    // )
-    // this.ctx.quadraticCurveTo(
-    //   Waves.width * 0.75,
-    //   this.y - this.wavePower * this.force,
-    //   Waves.width,
-    //   this.y
-    // )
-    // this.ctx.lineTo(Waves.width, Waves.height)
-    // this.ctx.lineTo(0, Waves.height)
-    // this.ctx.lineTo(0, this.y)
+    this.ctx.quadraticCurveTo(
+      Waves.width / 4,
+      this.y + this.wavePower * this.force,
+      Waves.width / 2,
+      this.y
+    )
+    this.ctx.quadraticCurveTo(
+      Waves.width * 0.75,
+      this.y - this.wavePower * this.force,
+      Waves.width,
+      this.y
+    )
+    this.ctx.lineTo(Waves.width, 0)
+    this.ctx.lineTo(0, 0)
+    this.ctx.lineTo(0, this.y)
     this.ctx.closePath()
     this.ctx.fill()
   }
@@ -78,30 +73,19 @@ export default class Waves {
 
     Waves.width = $width
     Waves.height = $height
-    Waves.globalY = 0
+    Waves.globalY = $height / 3
 
     this.move = 1
     this.ctx = $canvas.getContext('2d')
+    this.ctx.translate(0, Waves.height)
+    this.ctx.scale(1, -1)
 
     this.wavesArr = new Array()
 
-    this.beginingY = $height / 2
+    this.beginingY = Waves.globalY
     while (this.numberOfWaves--) {
       this.wavesArr.push(new Wave($canvas, this.beginingY, getWaveColor()))
       this.beginingY += this.waveGap
-    }
-  }
-
-  update() {
-    var len = this.wavesArr.length
-    while (len--) {
-      this.wavesArr[len].update()
-    }
-    Waves.globalY += this.move
-    if (Waves.globalY > Waves.height / 2 - 50) {
-      this.move = -1
-    } else if (Waves.globalY < -(Waves.height / 2)) {
-      this.move = 1
     }
   }
 
