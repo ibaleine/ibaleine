@@ -35,14 +35,12 @@
   align-items: center;
 }
 
-.footer img {
-  margin-left: 0.5rem;
-}
-
 .footer a {
   display: flex;
   justify-content: center;
   align-items: center;
+  font-weight: bolder;
+  color: #000;
 }
 
 .title a {
