@@ -16,15 +16,19 @@ class Wave {
   ctx
   color: string
   wavePower: number
-  count: number
+  idx: number = 0
   y: number
+  dir: string
+  static step: number = 0.3
 
-  constructor($canvas, $y, $color) {
+  constructor($canvas, $y, $color, $index) {
     this.ctx = $canvas.getContext('2d')
     this.color = $color
-    this.wavePower = Math.floor((Math.random() + 20) * 2)
-    this.count = $y
+    this.wavePower = Math.floor((Math.random() + 20) * 3)
     this.y = $y
+    this.idx = $index
+
+    this.dir = 'UP'
   }
 
   draw() {
@@ -39,47 +43,74 @@ class Wave {
     this.ctx.closePath()
     this.ctx.fill()
   }
+
+  move() {
+    if (this.y - Wave.step < Waves.minY) {
+      this.dir = 'DOWN'
+    } else if (this.y + Wave.step > Waves.maxY) {
+      this.dir = 'UP'
+    }
+
+    switch (this.dir) {
+      case 'UP':
+        this.y -= Wave.step
+        break
+      case 'DOWN':
+        this.y += Wave.step
+        break
+    }
+
+    this.draw()
+  }
 }
 
 export default class Waves {
   ctx
   numberOfWaves: number
   waveGap: number
-  move: number
   color: string
   wavesArr
   beginingY: number
 
-  static width
-  static height
-  static globalY
+  static width: number
+  static height: number
+  static minY: number
+  static maxY: number
 
   constructor($canvas, $width, $height, { numberOfWaves = 5, waveGap = 20 }) {
+    this.ctx = $canvas.getContext('2d')
     this.numberOfWaves = numberOfWaves
     this.waveGap = waveGap
 
     Waves.width = $width
     Waves.height = $height
-    Waves.globalY = ($height * 2) / 3
-
-    this.move = 1
+    Waves.minY = $height / 2
+    Waves.maxY = ($height * 3) / 4
+    console.log(Waves.height, Waves.minY, Waves.maxY)
 
     this.wavesArr = new Array()
 
-    this.beginingY = Waves.globalY
-    // x轴方向唯一，true正向移动，false负向移动
-    while (this.numberOfWaves--) {
-      this.wavesArr.push(new Wave($canvas, this.beginingY, getWaveColor()))
+    this.beginingY = Waves.maxY
+    for (let i = 0; i < this.numberOfWaves; i++) {
+      this.wavesArr.push(new Wave($canvas, this.beginingY, getWaveColor(), i))
       this.beginingY += this.waveGap
     }
+
+    this.draw()
   }
 
   draw() {
-    // this.ctx.save()
     var len = this.wavesArr.length
     while (len--) {
       this.wavesArr[len].draw()
     }
-    // this.ctx.restore()
+  }
+
+  animate() {
+    this.ctx.clearRect(0, 0, Waves.width, Waves.height)
+
+    this.wavesArr.forEach(wave => wave.move())
+
+    requestAnimationFrame(() => this.animate())
   }
 }

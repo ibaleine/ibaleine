@@ -20,7 +20,7 @@ export default function WaveCanvas() {
       numberOfWaves: 3,
       waveGap: 10,
     })
-    waves.draw()
+    waves.animate()
 
     window.addEventListener('resize', onResize)
     return () => {
